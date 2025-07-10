@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
-const { getPool } = require('../config/database');
+const db = require('../config/database');
 require("dotenv").config();
 
 const router = express.Router();
@@ -20,9 +20,8 @@ const authenticateAdmin = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
-    const pool = getPool();
     
-    const [admins] = await pool.execute(
+    const [admins] = await db.execute(
       'SELECT id, username FROM admins WHERE id = ?',
       [decoded.adminId]
     );
@@ -54,10 +53,9 @@ router.post('/login', [
     }
 
     const { username, password } = req.body;
-    const pool = getPool();
     
     // Get admin user
-    const [admins] = await pool.execute(
+    const [admins] = await db.execute(
       'SELECT id, username, password FROM admins WHERE username = ?',
       [username]
     );
@@ -120,10 +118,9 @@ router.post('/signup', [
     }
 
     const { username, password } = req.body;
-    const pool = getPool();
 
     // ตรวจสอบว่า username ซ้ำหรือไม่
-    const [existing] = await pool.execute(
+    const [existing] = await db.execute(
       'SELECT id FROM admins WHERE username = ?',
       [username]
     );
@@ -135,7 +132,7 @@ router.post('/signup', [
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // บันทึกลงฐานข้อมูล
-    const [result] = await pool.execute(
+    const [result] = await db.execute(
       'INSERT INTO admins (username, password) VALUES (?, ?)',
       [username, hashedPassword]
     );
@@ -170,7 +167,6 @@ router.get('/issues', authenticateAdmin, async (req, res) => {
     } = req.query;
     
     const offset = (parseInt(page) - 1) * parseInt(limit);
-    const pool = getPool();
     
     // Build WHERE clause
     let whereConditions = [];
@@ -195,7 +191,7 @@ router.get('/issues', authenticateAdmin, async (req, res) => {
       `WHERE ${whereConditions.join(' AND ')}` : '';
     
     // Get total count
-    const [countResult] = await pool.execute(
+    const [countResult] = await db.execute(
       `SELECT COUNT(*) as total FROM issues ${whereClause}`,
       queryParams
     );
@@ -213,14 +209,14 @@ router.get('/issues', authenticateAdmin, async (req, res) => {
      ${orderBy}
      LIMIT ${parseInt(limit)} OFFSET ${offset}`;
     
-    const [issues] = await pool.execute(finalQuery, queryParams);
+    const [issues] = await db.execute(finalQuery, queryParams);
 
     // Get images for all issues
     const issueIds = issues.map(issue => issue.id);
     let imagesMap = {};
     
     if (issueIds.length > 0) {
-      const [images] = await pool.execute(
+      const [images] = await db.execute(
         `SELECT issue_id, image_path, is_admin_image, created_at 
          FROM issue_images 
          WHERE issue_id IN (${issueIds.map(() => '?').join(',')}) 
@@ -259,7 +255,7 @@ router.get('/issues', authenticateAdmin, async (req, res) => {
     });
 
     // Get status counts
-    const [statusCounts] = await pool.execute(`
+    const [statusCounts] = await db.execute(`
       SELECT 
         status,
         COUNT(*) as count
@@ -320,10 +316,9 @@ router.put('/issues/:id', authenticateAdmin, [
 
     const { id } = req.params;
     const { status, adminResponse } = req.body;
-    const pool = getPool();
     
     // Get current issue
-    const [currentIssue] = await pool.execute(
+    const [currentIssue] = await db.execute(
       'SELECT status FROM issues WHERE id = ?',
       [id]
     );
@@ -335,13 +330,13 @@ router.put('/issues/:id', authenticateAdmin, [
     const previousStatus = currentIssue[0].status;
     
     // Update issue
-    await pool.execute(
+    await db.execute(
       'UPDATE issues SET status = ?, admin_response = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
       [status, adminResponse || null, id]
     );
     
     // Record status history
-    await pool.execute(
+    await db.execute(
       'INSERT INTO status_history (issue_id, previous_status, new_status, changed_by) VALUES (?, ?, ?, ?)',
       [id, previousStatus, status, req.admin.username]
     );
@@ -364,10 +359,9 @@ router.put('/issues/:id', authenticateAdmin, [
 router.get('/issues/:id', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const pool = getPool();
     
     // Get issue details
-    const [issues] = await pool.execute(
+    const [issues] = await db.execute(
       `SELECT 
         id, tracking_code, customer_line_name, emails, problem_type, 
         problem_description, status, admin_response, created_at, updated_at
@@ -383,13 +377,13 @@ router.get('/issues/:id', authenticateAdmin, async (req, res) => {
     const issue = issues[0];
     
     // Get issue images
-    const [images] = await pool.execute(
+    const [images] = await db.execute(
       'SELECT id, image_path, is_admin_image, created_at FROM issue_images WHERE issue_id = ? ORDER BY created_at',
       [issue.id]
     );
     
     // Get status history
-    const [history] = await pool.execute(
+    const [history] = await db.execute(
       'SELECT previous_status, new_status, changed_by, changed_at FROM status_history WHERE issue_id = ? ORDER BY changed_at',
       [issue.id]
     );
@@ -424,10 +418,9 @@ router.get('/issues/:id', authenticateAdmin, async (req, res) => {
 router.delete('/issues/:id', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const pool = getPool();
     
     // Check if issue exists and is completed
-    const [issues] = await pool.execute(
+    const [issues] = await db.execute(
       'SELECT id, status FROM issues WHERE id = ?',
       [id]
     );
@@ -441,7 +434,7 @@ router.delete('/issues/:id', authenticateAdmin, async (req, res) => {
     }
     
     // Delete issue (cascades to images and history)
-    await pool.execute('DELETE FROM issues WHERE id = ?', [id]);
+    await db.execute('DELETE FROM issues WHERE id = ?', [id]);
 
     res.json({
       success: true,

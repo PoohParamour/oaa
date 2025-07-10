@@ -3,7 +3,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
-const { getPool } = require('../config/database');
+const db = require('../config/database');
 require("dotenv").config();
 const router = express.Router();
 
@@ -55,10 +55,10 @@ router.post('/admin-images/:issueId', upload.array('images', 2), async (req, res
       return res.status(400).json({ error: 'อัพโหลดได้สูงสุด 2 รูป' });
     }
 
-    const pool = getPool();
+
     
     // Check if issue exists
-    const [issues] = await pool.execute(
+    const [issues] = await db.execute(
       'SELECT id FROM issues WHERE id = ?',
       [issueId]
     );
@@ -97,7 +97,7 @@ router.post('/admin-images/:issueId', upload.array('images', 2), async (req, res
         await fs.promises.writeFile(filepath, imageBuffer);
 
         // Save file info to database
-        const [result] = await pool.execute(
+        const [result] = await db.execute(
           'INSERT INTO issue_images (issue_id, image_path, image_size, mime_type, is_admin_image) VALUES (?, ?, ?, ?, ?)',
           [issueId, filename, imageBuffer.length, 'image/jpeg', isAdmin === 'true' || isAdmin === true]
         );
@@ -149,10 +149,10 @@ router.post('/admin-images/:issueId', upload.array('images', 2), async (req, res
 router.delete('/image/:imageId', async (req, res) => {
   try {
     const { imageId } = req.params;
-    const pool = getPool();
+
     
     // Get image info
-    const [images] = await pool.execute(
+    const [images] = await db.execute(
       'SELECT id, image_path FROM issue_images WHERE id = ?',
       [imageId]
     );
@@ -175,7 +175,7 @@ router.delete('/image/:imageId', async (req, res) => {
     }
     
     // Delete from database
-    await pool.execute('DELETE FROM issue_images WHERE id = ?', [imageId]);
+    await db.execute('DELETE FROM issue_images WHERE id = ?', [imageId]);
 
     res.json({
       success: true,
@@ -221,13 +221,13 @@ router.get('/image/:filename', (req, res) => {
 // Utility function to clean up orphaned files (can be called by cron job)
 const cleanupOrphanedFiles = async () => {
   try {
-    const pool = getPool();
+
     
     // Get all files in uploads directory
     const files = await fs.promises.readdir(uploadsDir);
     
     // Get all image paths from database
-    const [dbImages] = await pool.execute('SELECT image_path FROM issue_images');
+    const [dbImages] = await db.execute('SELECT image_path FROM issue_images');
     const dbImagePaths = dbImages.map(img => img.image_path);
     
     // Find orphaned files

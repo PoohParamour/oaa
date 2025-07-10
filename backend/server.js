@@ -3,7 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
-const { connectDB } = require('./config/database');
+const db = require('./config/database');
 const CleanupService = require('./utils/cleanup');
 require('dotenv').config();
 

@@ -1,13 +1,13 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const { getPool } = require('../config/database');
+const db = require('../config/database');
 const { v4: uuidv4 } = require('uuid');
 require("dotenv").config();
 const router = express.Router();
 
 // Generate unique tracking code
 const generateTrackingCode = async () => {
-  const pool = getPool();
+
   let isUnique = false;
   let code;
   
@@ -16,7 +16,7 @@ const generateTrackingCode = async () => {
     const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     code = `OAA${timestamp}${random}`;
     
-    const [existing] = await pool.execute(
+    const [existing] = await db.execute(
       'SELECT id FROM issues WHERE tracking_code = ?',
       [code]
     );
@@ -71,13 +71,13 @@ router.post('/', createIssueValidation, async (req, res) => {
     }
 
     const { customerLineName, emails, problemType, problemDescription } = req.body;
-    const pool = getPool();
+  
     
     // Generate unique tracking code
     const trackingCode = await generateTrackingCode();
     
     // Insert issue
-    const [result] = await pool.execute(
+    const [result] = await db.execute(
       `INSERT INTO issues (tracking_code, customer_line_name, emails, problem_type, problem_description) 
        VALUES (?, ?, ?, ?, ?)`,
       [trackingCode, customerLineName, JSON.stringify(emails), problemType, problemDescription]
@@ -103,10 +103,10 @@ router.post('/', createIssueValidation, async (req, res) => {
 router.get('/track/:trackingCode', async (req, res) => {
   try {
     const { trackingCode } = req.params;
-    const pool = getPool();
+  
     
     // Get issue details
-    const [issues] = await pool.execute(
+    const [issues] = await db.execute(
       `SELECT 
         id, tracking_code, customer_line_name, emails, problem_type, 
         problem_description, status, admin_response, created_at, updated_at
@@ -125,7 +125,7 @@ router.get('/track/:trackingCode', async (req, res) => {
     const issue = issues[0];
     
     // Get issue images
-    const [images] = await pool.execute(
+    const [images] = await db.execute(
       'SELECT image_path, is_admin_image, created_at FROM issue_images WHERE issue_id = ? ORDER BY created_at',
       [issue.id]
     );

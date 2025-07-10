@@ -1,6 +1,5 @@
 const mysql = require('mysql2/promise');
 
-// สร้าง connection pool เดียวทั่วระบบ
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -12,26 +11,25 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// ทดสอบการเชื่อมต่อทันทีที่แอปเริ่ม
+// ทดสอบ connection ตอนเริ่มต้น
 (async () => {
   try {
     await pool.query('SELECT 1');
-    console.log('✅ MySQL connected successfully');
-  } catch (error) {
-    console.error('❌ MySQL connection failed:', error.message);
+    console.log('✅ MySQL pool connected');
+  } catch (err) {
+    console.error('❌ MySQL connection failed:', err.message);
     process.exit(1);
   }
 })();
 
-// 🔁 ฟังก์ชัน query ปลอดภัย พร้อม Retry 1 ครั้งถ้า connection หลุด
+// query wrapper ปลอดภัย
 async function safeQuery(sql, params = []) {
   try {
     const [rows] = await pool.query(sql, params);
     return rows;
   } catch (err) {
-    console.warn('⚠️ Query failed:', err.message);
-    if (err.fatal || err.code === 'PROTOCOL_CONNECTION_LOST') {
-      console.log('🔁 Retrying query...');
+    if (err.code === 'PROTOCOL_CONNECTION_LOST' || err.fatal) {
+      console.warn('🔁 Retrying query after connection lost...');
       const [rows] = await pool.query(sql, params);
       return rows;
     }
@@ -39,8 +37,20 @@ async function safeQuery(sql, params = []) {
   }
 }
 
-// ส่งออก query function และ pool เผื่อใช้พิเศษ
+// execute wrapper ปลอดภัย (ใช้กับ prepare statement)
+async function safeExecute(sql, params = []) {
+  try {
+    return await pool.execute(sql, params);
+  } catch (err) {
+    if (err.code === 'PROTOCOL_CONNECTION_LOST' || err.fatal) {
+      console.warn('🔁 Retrying execute after connection lost...');
+      return await pool.execute(sql, params);
+    }
+    throw err;
+  }
+}
+
 module.exports = {
   query: safeQuery,
-  getPool: () => pool
+  execute: safeExecute
 };
