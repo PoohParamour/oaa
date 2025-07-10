@@ -1,4 +1,4 @@
-const { getPool } = require('../config/database');
+const db = require('../config/database');
 const fs = require('fs');
 const path = require('path');
 
@@ -31,10 +31,10 @@ class CleanupService {
   // Delete completed issues older than 30 days
   async cleanupOldIssues() {
     try {
-      const pool = getPool();
+
       
       // Get images for issues that will be deleted
-      const [imagesToDelete] = await pool.execute(`
+      const [imagesToDelete] = await db.execute(`
         SELECT ii.image_path 
         FROM issue_images ii
         INNER JOIN issues i ON ii.issue_id = i.id
@@ -56,7 +56,7 @@ class CleanupService {
       }
 
       // Delete issues (cascade will handle related records)
-      const [result] = await pool.execute(`
+      const [result] = await db.execute(`
         DELETE FROM issues 
         WHERE status = 'completed' 
         AND updated_at < DATE_SUB(NOW(), INTERVAL 30 DAY)
@@ -74,7 +74,7 @@ class CleanupService {
   // Clean up orphaned files that don't have database records
   async cleanupOrphanedFiles() {
     try {
-      const pool = getPool();
+
       
       // Get all files in uploads directory
       if (!fs.existsSync(this.uploadsDir)) {
@@ -85,7 +85,7 @@ class CleanupService {
       const files = await fs.promises.readdir(this.uploadsDir);
       
       // Get all image paths from database
-      const [dbImages] = await pool.execute('SELECT image_path FROM issue_images');
+      const [dbImages] = await db.execute('SELECT image_path FROM issue_images');
       const dbImagePaths = dbImages.map(img => img.image_path);
       
       // Find orphaned files
@@ -116,10 +116,10 @@ class CleanupService {
   // Get cleanup statistics
   async getCleanupStats() {
     try {
-      const pool = getPool();
+
       
       // Count issues eligible for cleanup
-      const [eligibleIssues] = await pool.execute(`
+      const [eligibleIssues] = await db.execute(`
         SELECT COUNT(*) as count 
         FROM issues 
         WHERE status = 'completed' 
@@ -134,7 +134,7 @@ class CleanupService {
         const files = await fs.promises.readdir(this.uploadsDir);
         totalFiles = files.length;
         
-        const [dbImages] = await pool.execute('SELECT image_path FROM issue_images');
+        const [dbImages] = await db.execute('SELECT image_path FROM issue_images');
         const dbImagePaths = dbImages.map(img => img.image_path);
         orphanedFiles = files.filter(file => !dbImagePaths.includes(file)).length;
       }
