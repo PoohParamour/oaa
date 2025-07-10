@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS issues (
     tracking_code VARCHAR(20) UNIQUE NOT NULL,
     customer_line_name VARCHAR(255) NOT NULL,
     emails JSON NOT NULL,
-    problem_type ENUM('youtube_premium', 'family_plan', 'email_not_working') NOT NULL,
+    problem_type ENUM('youtube_premium', 'family_plan', 'email_not_working', 'Google Form') NOT NULL,
     problem_description TEXT NOT NULL,
     status ENUM('pending', 'in_progress', 'contact_admin', 'completed') DEFAULT 'pending',
     admin_response TEXT,

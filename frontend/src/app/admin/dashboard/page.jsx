@@ -44,6 +44,7 @@ export default function AdminDashboard() {
     completed: 0,
   });
 
+
   const statusConfig = {
     pending: {
       label: "รอดำเนินการ",
@@ -72,9 +73,10 @@ export default function AdminDashboard() {
   };
 
   const problemTypeLabels = {
-    youtube_premium: "ยูทูปไม่ขึ้นพรีเมี่ยม/ยูทูปขึ้นโฆษณา",
-    family_plan: "ครอบครัวไม่พร้อมใช้งาน",
-    email_not_working: "เมลร้านใช้งานไม่ได้",
+    youtube_premium: "ไม่ขึ้นพรีเมี่ยมใช้งานไม่ได้ ซื้อนานแล้ว เฉพาะก่อนวันที่ 15 มิ.ย. (ไม่เกินวันที่ 15) กรณีนี้หลุดพรีเมี่ยมและต้องขึ้น Family manager",
+    family_plan: "กลุ่มครอบครัวไม่พร้อมใช้งาน เช็คหน้า Family แล้วไม่ขึ้นกลุ่มครอบครัว",
+    email_not_working: "อีเมลร้านติดยืนยัน ใช้งานไม่ได้ ไม่สามารถ Login และต้องยืนยันเบอร์โทร",
+    "Google Form" : "ลูกค้าส่ง Google Form เก่าของทางร้าน เช่น ย้าย Family รวมทั้งกรณีเลือกรับเมลร้าน แต่ยังไม่ได้รับการแก้ไข หรือรับเมล หรือ กลุ่มครอบครัวไม่พร้อมใช้งาน แต่ยังไม่มีสถานะในชีท Update",
   };
 
   useEffect(() => {

@@ -65,9 +65,14 @@ export default function TrackPage() {
   };
 
   const problemTypeLabels = {
-    youtube_premium: "ยูทูปไม่ขึ้นพรีเมี่ยม/ยูทูปขึ้นโฆษณา",
-    family_plan: "ครอบครัวไม่พร้อมใช้งาน",
-    email_not_working: "เมลร้านใช้งานไม่ได้",
+    youtube_premium:
+      "ไม่ขึ้นพรีเมี่ยมใช้งานไม่ได้ ซื้อนานแล้ว เฉพาะก่ ...",
+    family_plan:
+      "กลุ่มครอบครัวไม่พร้อมใช้งาน เช็คหน้า Family ...",
+    email_not_working:
+      "อีเมลร้านติดยืนยัน ใช้งานไม่ได้ ไม่สามารถ Lo ...",
+    "Google Form":
+      "ลูกค้าส่ง Google Form เก่าของทางร้าน เช่น ...",
   };
 
   useEffect(() => {

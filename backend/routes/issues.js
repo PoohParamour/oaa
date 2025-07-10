@@ -62,13 +62,13 @@ const createIssueValidation = [
 // POST /api/issues - Create new issue
 router.post('/', createIssueValidation, async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: 'ข้อมูลไม่ถูกต้อง',
-        details: errors.array()
-      });
-    }
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({
+    //     error: 'ข้อมูลไม่ถูกต้อง',
+    //     details: errors.array()
+    //   });
+    // }
 
     const { customerLineName, emails, problemType, problemDescription } = req.body;
   
