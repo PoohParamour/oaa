@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { toast } from 'react-hot-toast';
-import { 
-  MagnifyingGlassIcon, 
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { toast } from "react-hot-toast";
+import {
+  MagnifyingGlassIcon,
   ArrowLeftIcon,
   ClockIcon,
   CheckCircleIcon,
@@ -16,56 +16,58 @@ import {
   UserIcon,
   ShieldCheckIcon,
   SparklesIcon,
-  PhotoIcon
-} from '@heroicons/react/24/outline';
-import axios from 'axios';
+  PhotoIcon,
+} from "@heroicons/react/24/outline";
+import axios from "axios";
 
 export default function TrackPage() {
   const searchParams = useSearchParams();
-  const [trackingCode, setTrackingCode] = useState(searchParams.get('code') || '');
+  const [trackingCode, setTrackingCode] = useState(
+    searchParams.get("code") || ""
+  );
   const [issue, setIssue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
 
   const statusConfig = {
     pending: {
-      label: 'รอดำเนินการ',
+      label: "รอดำเนินการ",
       icon: ClockIcon,
-      color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-      gradientColor: 'from-yellow-400 to-amber-500',
-      dotColor: 'bg-yellow-500',
-      description: 'ปัญหาของคุณได้รับการบันทึกแล้ว กำลังรอทีมงานตรวจสอบ'
+      color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+      gradientColor: "from-yellow-400 to-amber-500",
+      dotColor: "bg-yellow-500",
+      description: "ปัญหาของคุณได้รับการบันทึกแล้ว กำลังรอทีมงานตรวจสอบ",
     },
     in_progress: {
-      label: 'กำลังดำเนินการ',
+      label: "กำลังดำเนินการ",
       icon: ExclamationCircleIcon,
-      color: 'bg-blue-100 text-blue-800 border-blue-200',
-      gradientColor: 'from-blue-400 to-sky-500',
-      dotColor: 'bg-blue-500',
-      description: 'ทีมงานกำลังตรวจสอบและดำเนินการแก้ไขปัญหา'
+      color: "bg-blue-100 text-blue-800 border-blue-200",
+      gradientColor: "from-blue-400 to-sky-500",
+      dotColor: "bg-blue-500",
+      description: "ทีมงานกำลังตรวจสอบและดำเนินการแก้ไขปัญหา",
     },
     contact_admin: {
-      label: 'ติดต่อแอดมินทางไลน์',
+      label: "ติดต่อแอดมินทางไลน์",
       icon: ChatBubbleLeftEllipsisIcon,
-      color: 'bg-purple-100 text-purple-800 border-purple-200',
-      gradientColor: 'from-purple-400 to-pink-500',
-      dotColor: 'bg-purple-500',
-      description: 'กรุณาติดต่อแอดมินทางไลน์เพื่อข้อมูลเพิ่มเติม'
+      color: "bg-purple-100 text-purple-800 border-purple-200",
+      gradientColor: "from-purple-400 to-pink-500",
+      dotColor: "bg-purple-500",
+      description: "กรุณาติดต่อแอดมินทางไลน์เพื่อข้อมูลเพิ่มเติม",
     },
     completed: {
-      label: 'เสร็จสิ้น',
+      label: "เสร็จสิ้น",
       icon: CheckCircleIcon,
-      color: 'bg-green-100 text-green-800 border-green-200',
-      gradientColor: 'from-green-400 to-emerald-500',
-      dotColor: 'bg-green-500',
-      description: 'ปัญหาได้รับการแก้ไขเรียบร้อยแล้ว'
-    }
+      color: "bg-green-100 text-green-800 border-green-200",
+      gradientColor: "from-green-400 to-emerald-500",
+      dotColor: "bg-green-500",
+      description: "ปัญหาได้รับการแก้ไขเรียบร้อยแล้ว",
+    },
   };
 
   const problemTypeLabels = {
-    youtube_premium: 'ยูทูปไม่ขึ้นพรีเมี่ยม/ยูทูปขึ้นโฆษณา',
-    family_plan: 'ครอบครัวไม่พร้อมใช้งาน',
-    email_not_working: 'เมลร้านใช้งานไม่ได้'
+    youtube_premium: "ยูทูปไม่ขึ้นพรีเมี่ยม/ยูทูปขึ้นโฆษณา",
+    family_plan: "ครอบครัวไม่พร้อมใช้งาน",
+    email_not_working: "เมลร้านใช้งานไม่ได้",
   };
 
   useEffect(() => {
@@ -76,29 +78,31 @@ export default function TrackPage() {
 
   const searchIssue = async () => {
     if (!trackingCode.trim()) {
-      toast.error('กรุณากรอกรหัสติดตาม');
+      toast.error("กรุณากรอกรหัสติดตาม");
       return;
     }
 
     try {
       setLoading(true);
       setSearched(true);
-      
-      const response = await axios.get(`http://localhost:5001/api/issues/track/${trackingCode}`);
-      
+
+      const response = await axios.get(
+        `http://localhost:5001/api/issues/track/${trackingCode}`
+      );
+
       if (response.data.success) {
         setIssue(response.data.data);
       } else {
         setIssue(null);
-        toast.error('ไม่พบข้อมูลปัญหาที่ตรงกับรหัสนี้');
+        toast.error("ไม่พบข้อมูลปัญหาที่ตรงกับรหัสนี้");
       }
     } catch (error) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
       setIssue(null);
       if (error.response?.status === 404) {
-        toast.error('ไม่พบข้อมูลปัญหาที่ตรงกับรหัสนี้');
+        toast.error("ไม่พบข้อมูลปัญหาที่ตรงกับรหัสนี้");
       } else {
-        toast.error('เกิดข้อผิดพลาดในการค้นหา');
+        toast.error("เกิดข้อผิดพลาดในการค้นหา");
       }
     } finally {
       setLoading(false);
@@ -106,12 +110,12 @@ export default function TrackPage() {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString('th-TH', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleString("th-TH", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -121,19 +125,21 @@ export default function TrackPage() {
       <nav className="bg-white/70 backdrop-blur-md border-b border-pink-200">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link 
+            <Link
               href="/"
               className="flex items-center gap-3 text-pink-600 hover:text-pink-700 transition-colors"
             >
               <ArrowLeftIcon className="w-5 h-5" />
               <span className="font-medium">กลับหน้าหลัก</span>
             </Link>
-            
+
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-rose-500 rounded-lg flex items-center justify-center shadow-lg">
                 <HeartIcon className="w-4 h-4 text-white" />
               </div>
-              <span className="font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">OAA Support</span>
+              <span className="font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
+                Femistyhouse Support
+              </span>
             </div>
           </div>
         </div>
@@ -167,8 +173,10 @@ export default function TrackPage() {
                 <input
                   type="text"
                   value={trackingCode}
-                  onChange={(e) => setTrackingCode(e.target.value.toUpperCase())}
-                  onKeyPress={(e) => e.key === 'Enter' && searchIssue()}
+                  onChange={(e) =>
+                    setTrackingCode(e.target.value.toUpperCase())
+                  }
+                  onKeyPress={(e) => e.key === "Enter" && searchIssue()}
                   placeholder="ใส่รหัสติดตาม เช่น OAA123456789"
                   className="w-full px-4 py-3 border-2 border-pink-200 rounded-xl focus:border-pink-400 focus:outline-none transition-all font-mono text-center bg-pink-50/30 focus:bg-white"
                 />
@@ -207,19 +215,27 @@ export default function TrackPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <h2 className="text-2xl font-bold mb-2">สถานะปัญหา</h2>
-                        <p className="text-pink-100">รหัสติดตาม: {issue.tracking_code}</p>
+                        <p className="text-pink-100">
+                          รหัสติดตาม: {issue.tracking_code}
+                        </p>
                       </div>
                       <div className="text-right">
-                        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/30`}>
+                        <div
+                          className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/30`}
+                        >
                           {(() => {
                             const config = statusConfig[issue.status];
                             const Icon = config.icon;
                             return (
                               <>
-                                <div className={`w-8 h-8 bg-gradient-to-br ${config.gradientColor} rounded-lg flex items-center justify-center`}>
+                                <div
+                                  className={`w-8 h-8 bg-gradient-to-br ${config.gradientColor} rounded-lg flex items-center justify-center`}
+                                >
                                   <Icon className="w-5 h-5 text-white" />
                                 </div>
-                                <span className="font-semibold">{config.label}</span>
+                                <span className="font-semibold">
+                                  {config.label}
+                                </span>
                               </>
                             );
                           })()}
@@ -227,7 +243,7 @@ export default function TrackPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="p-8">
                     <div className="grid md:grid-cols-2 gap-8">
                       {/* Issue Details */}
@@ -240,12 +256,17 @@ export default function TrackPage() {
                           <div className="space-y-3">
                             <div className="flex justify-between">
                               <span className="text-gray-600">ชื่อไลน์:</span>
-                              <span className="font-medium text-gray-900">{issue.customer_line_name}</span>
+                              <span className="font-medium text-gray-900">
+                                {issue.customer_line_name}
+                              </span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">ประเภทปัญหา:</span>
+                              <span className="text-gray-600">
+                                ประเภทปัญหา:
+                              </span>
                               <span className="font-medium text-gray-900">
-                                {problemTypeLabels[issue.problem_type] || issue.problem_type}
+                                {problemTypeLabels[issue.problem_type] ||
+                                  issue.problem_type}
                               </span>
                             </div>
                           </div>
@@ -259,11 +280,17 @@ export default function TrackPage() {
                           <div className="space-y-3">
                             <div className="flex justify-between">
                               <span className="text-gray-600">วันที่แจ้ง:</span>
-                              <span className="font-medium text-gray-900">{formatDate(issue.created_at)}</span>
+                              <span className="font-medium text-gray-900">
+                                {formatDate(issue.created_at)}
+                              </span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">อัพเดทล่าสุด:</span>
-                              <span className="font-medium text-gray-900">{formatDate(issue.updated_at)}</span>
+                              <span className="text-gray-600">
+                                อัพเดทล่าสุด:
+                              </span>
+                              <span className="font-medium text-gray-900">
+                                {formatDate(issue.updated_at)}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -275,7 +302,11 @@ export default function TrackPage() {
                           <ShieldCheckIcon className="w-5 h-5 text-pink-600" />
                           สถานะปัจจุบัน
                         </h3>
-                        <div className={`p-4 rounded-xl border-2 ${statusConfig[issue.status].color}`}>
+                        <div
+                          className={`p-4 rounded-xl border-2 ${
+                            statusConfig[issue.status].color
+                          }`}
+                        >
                           <p className="text-sm leading-relaxed">
                             {statusConfig[issue.status].description}
                           </p>
@@ -287,9 +318,16 @@ export default function TrackPage() {
 
                 {/* Problem Description */}
                 <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-pink-200 p-8">
-                  <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">รายละเอียดปัญหา</h3>
-                  <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-6 border border-pink-200">
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                  <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">
+                    รายละเอียดปัญหา
+                  </h3>
+
+                  <div
+                    className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-6 border border-pink-200 
+                    max-h-[300px] overflow-y-auto whitespace-pre-wrap break-words leading-relaxed 
+                    scrollbar-thin scrollbar-thumb-pink-300 scrollbar-track-pink-100"
+                  >
+                    <p className="text-gray-800 text-sm">
                       {issue.problem_description}
                     </p>
                   </div>
@@ -298,11 +336,18 @@ export default function TrackPage() {
                 {/* Emails */}
                 {issue.emails && issue.emails.length > 0 && (
                   <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-pink-200 p-8">
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">อีเมลที่เกี่ยวข้อง</h3>
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">
+                      อีเมลที่เกี่ยวข้อง
+                    </h3>
                     <div className="grid gap-3">
                       {issue.emails.map((email, index) => (
-                        <div key={index} className="bg-gradient-to-r from-pink-50 to-rose-50 rounded-xl p-4 border border-pink-200">
-                          <span className="text-gray-700 font-mono">{email}</span>
+                        <div
+                          key={index}
+                          className="bg-gradient-to-r from-pink-50 to-rose-50 rounded-xl p-4 border border-pink-200"
+                        >
+                          <span className="text-gray-700 font-mono">
+                            {email}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -312,7 +357,9 @@ export default function TrackPage() {
                 {/* Customer Images */}
                 {issue.customer_images && issue.customer_images.length > 0 && (
                   <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-pink-200 p-8">
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">รูปภาพประกอบ</h3>
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">
+                      รูปภาพประกอบ
+                    </h3>
                     <div className="grid md:grid-cols-2 gap-6">
                       {issue.customer_images.map((image, index) => (
                         <div key={index} className="relative group">
@@ -320,7 +367,12 @@ export default function TrackPage() {
                             src={`http://localhost:5001${image}`}
                             alt={`รูปภาพประกอบ ${index + 1}`}
                             className="w-full h-64 object-cover rounded-2xl border border-pink-200 group-hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg"
-                            onClick={() => window.open(`http://localhost:5001${image}`, '_blank')}
+                            onClick={() =>
+                              window.open(
+                                `http://localhost:5001${image}`,
+                                "_blank"
+                              )
+                            }
                           />
                           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1 shadow-md">
                             <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
@@ -337,17 +389,25 @@ export default function TrackPage() {
                 {/* Admin Response */}
                 {issue.admin_response && (
                   <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-pink-200 p-8">
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">การตอบกลับจากแอดมิน</h3>
-                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
-                      <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-6">
+                      การตอบกลับจากแอดมิน
+                    </h3>
+
+                    <div
+                      className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200 
+                      max-h-[300px] overflow-y-auto"
+                    >
+                      <div className="text-gray-700 leading-relaxed whitespace-pre-wrap break-words">
                         {issue.admin_response}
-                      </p>
+                      </div>
                     </div>
-                    
+
                     {/* Admin Images */}
                     {issue.admin_images && issue.admin_images.length > 0 && (
                       <div className="mt-6">
-                        <h4 className="text-lg font-semibold text-gray-900 mb-4">รูปภาพจากแอดมิน</h4>
+                        <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                          รูปภาพจากแอดมิน
+                        </h4>
                         <div className="grid md:grid-cols-2 gap-6">
                           {issue.admin_images.map((image, index) => (
                             <div key={index} className="relative group">
@@ -355,7 +415,12 @@ export default function TrackPage() {
                                 src={`http://localhost:5001${image}`}
                                 alt={`รูปภาพจากแอดมิน ${index + 1}`}
                                 className="w-full h-64 object-cover rounded-2xl border border-purple-200 group-hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg"
-                                onClick={() => window.open(`http://localhost:5001${image}`, '_blank')}
+                                onClick={() =>
+                                  window.open(
+                                    `http://localhost:5001${image}`,
+                                    "_blank"
+                                  )
+                                }
                               />
                               <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1 shadow-md">
                                 <span className="text-sm font-medium text-gray-700 flex items-center gap-1">
@@ -401,9 +466,12 @@ export default function TrackPage() {
                 <div className="w-24 h-24 bg-gradient-to-br from-pink-100 to-rose-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <MagnifyingGlassIcon className="w-12 h-12 text-pink-400" />
                 </div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-4">ไม่พบข้อมูล</h3>
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-4">
+                  ไม่พบข้อมูล
+                </h3>
                 <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                  ไม่พบปัญหาที่ตรงกับรหัสติดตามที่ระบุ กรุณาตรวจสอบรหัสให้ถูกต้องและลองใหม่อีกครั้ง
+                  ไม่พบปัญหาที่ตรงกับรหัสติดตามที่ระบุ
+                  กรุณาตรวจสอบรหัสให้ถูกต้องและลองใหม่อีกครั้ง
                 </p>
                 <div className="space-y-3 max-w-sm mx-auto">
                   <p className="text-sm text-gray-500">เคล็ดลับ:</p>
@@ -429,4 +497,4 @@ export default function TrackPage() {
       </div>
     </div>
   );
-} 
+}

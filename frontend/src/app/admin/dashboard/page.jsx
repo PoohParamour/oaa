@@ -382,6 +382,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Issues List */}
+
         <div className="space-y-6">
           {issues.length === 0 ? (
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-pink-200 p-12 text-center">
@@ -396,157 +397,170 @@ export default function AdminDashboard() {
               </p>
             </div>
           ) : (
-            issues.map((issue) => (
-              <div
-                key={issue.id}
-                className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-pink-200 overflow-hidden hover:shadow-2xl transition-all"
-              >
-                <div className="p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-start gap-6">
-                    {/* Issue Info */}
-                    <div className="flex-1 space-y-4">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h3 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-                            รหัส: {issue.tracking_code}
-                          </h3>
-                          <div className="flex items-center gap-4 text-sm text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <UserIcon className="w-4 h-4 text-pink-500" />
-                              {issue.customer_line_name}
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <CalendarDaysIcon className="w-4 h-4 text-pink-500" />
-                              {formatDate(issue.created_at)}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div
-                          className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 text-sm font-medium ${
-                            statusConfig[issue.status].color
-                          }`}
-                        >
-                          {(() => {
-                            const Icon = statusConfig[issue.status].icon;
-                            return <Icon className="w-4 h-4" />;
-                          })()}
-                          {statusConfig[issue.status].label}
-                        </div>
-                      </div>
-
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-gray-600 mb-1">
-                            ประเภทปัญหา:
-                          </p>
-                          <p className="font-medium text-gray-900">
-                            {problemTypeLabels[issue.problem_type] ||
-                              issue.problem_type}
-                          </p>
-                        </div>
-
-                        <div>
-                          <p className="text-sm text-gray-600 mb-1">
-                            อีเมลที่เกี่ยวข้อง:
-                          </p>
-                          <div className="flex flex-wrap gap-1">
-                            {(issue.emails || [])
-                              .slice(0, 2)
-                              .map((email, index) => (
-                                <span
-                                  key={index}
-                                  className="bg-gradient-to-r from-pink-50 to-rose-50 text-gray-700 px-2 py-1 rounded-lg text-xs border border-pink-200"
-                                >
-                                  {email}
-                                </span>
-                              ))}
-                            {(issue.emails || []).length > 2 && (
-                              <span className="text-gray-500 text-xs">
-                                +{(issue.emails || []).length - 2} อื่นๆ
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div>
-                        <p className="text-sm text-gray-600 mb-2">
-                          รายละเอียดปัญหา:
-                        </p>
-                        <p className="text-gray-700 bg-gradient-to-br from-pink-50 to-rose-50 p-3 rounded-xl text-sm leading-relaxed border border-pink-100">
-                          {issue.problem_description.length > 150
-                            ? `${issue.problem_description.substring(
-                                0,
-                                150
-                              )}...`
-                            : issue.problem_description}
-                        </p>
-                      </div>
-
-                      {/* Images preview */}
-                      {issue.customer_images &&
-                        issue.customer_images.length > 0 && (
+            issues
+              .filter((issue) => {
+                const query = searchQuery.toLowerCase();
+                return (
+                  issue.tracking_code.toLowerCase().includes(query) ||
+                  issue.customer_line_name.toLowerCase().includes(query) ||
+                  (Array.isArray(issue.emails)
+                    ? issue.emails.some((email) =>
+                        email.toLowerCase().includes(query)
+                      )
+                    : false)
+                );
+              })
+              .map((issue) => (
+                <div
+                  key={issue.id}
+                  className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-pink-200 overflow-hidden hover:shadow-2xl transition-all"
+                >
+                  <div className="p-6">
+                    <div className="flex flex-col lg:flex-row lg:items-start gap-6">
+                      {/* Issue Info */}
+                      <div className="flex-1 space-y-4">
+                        <div className="flex items-start justify-between">
                           <div>
-                            <p className="text-sm text-slate-600 mb-2">
-                              รูปภาพประกอบ:
+                            <h3 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                              รหัส: {issue.tracking_code}
+                            </h3>
+                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                              <div className="flex items-center gap-1">
+                                <UserIcon className="w-4 h-4 text-pink-500" />
+                                {issue.customer_line_name}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <CalendarDaysIcon className="w-4 h-4 text-pink-500" />
+                                {formatDate(issue.created_at)}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div
+                            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border-2 text-sm font-medium ${
+                              statusConfig[issue.status].color
+                            }`}
+                          >
+                            {(() => {
+                              const Icon = statusConfig[issue.status].icon;
+                              return <Icon className="w-4 h-4" />;
+                            })()}
+                            {statusConfig[issue.status].label}
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-gray-600 mb-1">
+                              ประเภทปัญหา:
                             </p>
-                            <div className="flex gap-2">
-                              {issue.customer_images
-                                .slice(0, 3)
-                                .map((image, index) => (
-                                  <img
+                            <p className="font-medium text-gray-900">
+                              {problemTypeLabels[issue.problem_type] ||
+                                issue.problem_type}
+                            </p>
+                          </div>
+
+                          <div>
+                            <p className="text-sm text-gray-600 mb-1">
+                              อีเมลที่เกี่ยวข้อง:
+                            </p>
+                            <div className="flex flex-wrap gap-1">
+                              {(issue.emails || [])
+                                .slice(0, 2)
+                                .map((email, index) => (
+                                  <span
                                     key={index}
-                                    src={`http://localhost:5001${image}`}
-                                    alt={`รูปภาพ ${index + 1}`}
-                                    className="w-16 h-16 object-cover rounded-lg border border-slate-200 cursor-pointer hover:scale-110 transition-transform"
-                                    onClick={() =>
-                                      window.open(
-                                        `http://localhost:5001${image}`,
-                                        "_blank"
-                                      )
-                                    }
-                                  />
-                                ))}
-                              {issue.customer_images.length > 3 && (
-                                <div className="w-16 h-16 bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center">
-                                  <span className="text-xs text-slate-600">
-                                    +{issue.customer_images.length - 3}
+                                    className="bg-gradient-to-r from-pink-50 to-rose-50 text-gray-700 px-2 py-1 rounded-lg text-xs border border-pink-200"
+                                  >
+                                    {email}
                                   </span>
-                                </div>
+                                ))}
+                              {(issue.emails || []).length > 2 && (
+                                <span className="text-gray-500 text-xs">
+                                  +{(issue.emails || []).length - 2} อื่นๆ
+                                </span>
                               )}
                             </div>
                           </div>
-                        )}
-                    </div>
+                        </div>
 
-                    {/* Actions */}
-                    <div className="lg:w-48 flex flex-col gap-3">
-                      <button
-                        onClick={() => openModal(issue)}
-                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-4 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all font-medium flex items-center justify-center gap-2 transform hover:scale-105 shadow-lg"
-                      >
-                        <EyeIcon className="w-5 h-5" />
-                        จัดการ
-                      </button>
-
-                      {issue.admin_response && (
-                        <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-3 rounded-xl border border-purple-200">
-                          <p className="text-xs text-gray-600 mb-1">
-                            ตอบกลับแล้ว:
+                        <div>
+                          <p className="text-sm text-gray-600 mb-2">
+                            รายละเอียดปัญหา:
                           </p>
-                          <p className="text-sm text-gray-700 leading-relaxed overflow-hidden">
-                            {issue.admin_response.length > 50
-                              ? `${issue.admin_response.substring(0, 50)}...`
-                              : issue.admin_response}
+                          <p className="text-gray-700 bg-gradient-to-br from-pink-50 to-rose-50 p-3 rounded-xl text-sm leading-relaxed border border-pink-100 overflow-scroll">
+                            {issue.problem_description.length > 100
+                              ? `${issue.problem_description.substring(
+                                  0,
+                                  100
+                                )}...`
+                              : issue.problem_description}
                           </p>
                         </div>
-                      )}
+
+                        {/* Images preview */}
+                        {issue.customer_images &&
+                          issue.customer_images.length > 0 && (
+                            <div>
+                              <p className="text-sm text-slate-600 mb-2">
+                                รูปภาพประกอบ:
+                              </p>
+                              <div className="flex gap-2">
+                                {issue.customer_images
+                                  .slice(0, 3)
+                                  .map((image, index) => (
+                                    <img
+                                      key={index}
+                                      src={`http://localhost:5001${image}`}
+                                      alt={`รูปภาพ ${index + 1}`}
+                                      className="w-16 h-16 object-cover rounded-lg border border-slate-200 cursor-pointer hover:scale-110 transition-transform"
+                                      onClick={() =>
+                                        window.open(
+                                          `http://localhost:5001${image}`,
+                                          "_blank"
+                                        )
+                                      }
+                                    />
+                                  ))}
+                                {issue.customer_images.length > 3 && (
+                                  <div className="w-16 h-16 bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center">
+                                    <span className="text-xs text-slate-600">
+                                      +{issue.customer_images.length - 3}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                      </div>
+
+                      {/* Actions */}
+                      <div className="lg:w-48 flex flex-col gap-3">
+                        <button
+                          onClick={() => openModal(issue)}
+                          className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-4 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all font-medium flex items-center justify-center gap-2 transform hover:scale-105 shadow-lg"
+                        >
+                          <EyeIcon className="w-5 h-5" />
+                          จัดการ
+                        </button>
+
+                        {issue.admin_response && (
+                          <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-3 rounded-xl border border-purple-200">
+                            <p className="text-xs text-gray-600 mb-1">
+                              ตอบกลับแล้ว:
+                            </p>
+                            <p className="text-sm text-gray-700 leading-relaxed overflow-hidden">
+                              {issue.admin_response.length > 50
+                                ? `${issue.admin_response.substring(0, 50)}...`
+                                : issue.admin_response}
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))
           )}
         </div>
 
@@ -594,7 +608,7 @@ export default function AdminDashboard() {
 
       {/* Modal */}
       {showModal && selectedIssue && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
             {/* Modal Header */}
             <div className="bg-gradient-to-r from-slate-600 to-slate-800 text-white p-6">
@@ -661,8 +675,11 @@ export default function AdminDashboard() {
                   <h3 className="font-semibold text-slate-900 mb-3">
                     รายละเอียดปัญหา
                   </h3>
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <p className="text-slate-700 whitespace-pre-wrap leading-relaxed">
+                  <div
+                    className="bg-slate-50 p-4 rounded-xl border border-slate-200 
+    max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100"
+                  >
+                    <p className="text-slate-700 whitespace-pre-wrap break-words leading-relaxed">
                       {selectedIssue.problem_description}
                     </p>
                   </div>

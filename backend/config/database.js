@@ -1,6 +1,7 @@
 const mysql = require('mysql2/promise');
 
-const dbConfig = {
+// สร้าง connection pool เดียวทั่วระบบ
+const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
@@ -9,34 +10,37 @@ const dbConfig = {
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
-};
+});
 
-let pool;
-
-const connectDB = async () => {
+// ทดสอบการเชื่อมต่อทันทีที่แอปเริ่ม
+(async () => {
   try {
-    pool = mysql.createPool(dbConfig);
-    
-    // Test the connection
-    const connection = await pool.getConnection();
-    console.log('✅ MySQL Database connected successfully');
-    connection.release();
-    
-    return pool;
+    await pool.query('SELECT 1');
+    console.log('✅ MySQL connected successfully');
   } catch (error) {
-    console.error('❌ Database connection failed:', error.message);
+    console.error('❌ MySQL connection failed:', error.message);
     process.exit(1);
   }
-};
+})();
 
-const getPool = () => {
-  if (!pool) {
-    throw new Error('Database pool not initialized. Call connectDB() first.');
+// 🔁 ฟังก์ชัน query ปลอดภัย พร้อม Retry 1 ครั้งถ้า connection หลุด
+async function safeQuery(sql, params = []) {
+  try {
+    const [rows] = await pool.query(sql, params);
+    return rows;
+  } catch (err) {
+    console.warn('⚠️ Query failed:', err.message);
+    if (err.fatal || err.code === 'PROTOCOL_CONNECTION_LOST') {
+      console.log('🔁 Retrying query...');
+      const [rows] = await pool.query(sql, params);
+      return rows;
+    }
+    throw err;
   }
-  return pool;
-};
+}
 
+// ส่งออก query function และ pool เผื่อใช้พิเศษ
 module.exports = {
-  connectDB,
-  getPool
-}; 
+  query: safeQuery,
+  getPool: () => pool
+};

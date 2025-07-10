@@ -76,7 +76,7 @@ export default function AdminLoginPage() {
               <div className="w-8 h-8 bg-gradient-to-br from-pink-400 to-rose-500 rounded-lg flex items-center justify-center shadow-lg">
                 <HeartIcon className="w-4 h-4 text-white" />
               </div>
-              <span className="font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">OAA Support</span>
+              <span className="font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">Femistyhouse Support</span>
             </div>
           </div>
         </div>

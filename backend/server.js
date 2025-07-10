@@ -10,6 +10,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+
 // Security middleware
 app.use(helmet());
 
@@ -66,7 +67,6 @@ app.use('*', (req, res) => {
 const startServer = async () => {
   try {
     // Connect to database first
-    await connectDB();
     console.log('📅 Database connection established');
     
     // Initialize cleanup service
