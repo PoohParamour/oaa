@@ -44,7 +44,7 @@ export default function Home() {
                 ติดตามได้ทันที
               </span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               ระบบจัดการปัญหาที่ทันสมัย รวดเร็ว และใช้งานง่าย 
               พร้อมการติดตามสถานะแบบเรียลไทม์
             </p>
@@ -151,10 +151,6 @@ export default function Home() {
                   <li className="flex items-start gap-2">
                     <span className="text-pink-400 mt-1">•</span>
                     <span>อธิบายปัญหาให้ละเอียดและชัดเจน</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-pink-400 mt-1">•</span>
-                    <span>แนบหลักฐานหรือภาพประกอบ</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-pink-400 mt-1">•</span>

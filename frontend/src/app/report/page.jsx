@@ -278,8 +278,8 @@ export default function ReportPage() {
                   {...register("customerLineName", {
                     required: "กรุณากรอกชื่อไลน์ลูกค้า",
                     minLength: {
-                      value: 2,
-                      message: "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร",
+                      value: 1,
+                      message: "ชื่อต้องมีอย่างน้อย 1 ตัวอักษร",
                     },
                   })}
                   className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all ${
