@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 text-black">
       {/* Header */}
       <nav className="bg-white/70 backdrop-blur-md border-b border-pink-200">
         <div className="container mx-auto px-4 py-4">

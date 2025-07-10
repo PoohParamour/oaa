@@ -287,7 +287,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 text-[#000]">
       {/* Header */}
       <nav className="bg-white/70 backdrop-blur-md border-b border-pink-200 sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4">
@@ -535,7 +535,7 @@ export default function AdminDashboard() {
                           <p className="text-xs text-gray-600 mb-1">
                             ตอบกลับแล้ว:
                           </p>
-                          <p className="text-sm text-gray-700 leading-relaxed">
+                          <p className="text-sm text-gray-700 leading-relaxed overflow-hidden">
                             {issue.admin_response.length > 50
                               ? `${issue.admin_response.substring(0, 50)}...`
                               : issue.admin_response}
@@ -710,7 +710,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* File Upload */}
-                <div>
+                {/* <div>
                   <h3 className="font-semibold text-slate-900 mb-3">
                     แนบรูปภาพ (ไม่บังคับ)
                   </h3>
@@ -746,7 +746,7 @@ export default function AdminDashboard() {
                       ))}
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
 

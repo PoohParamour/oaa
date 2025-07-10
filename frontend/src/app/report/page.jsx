@@ -142,7 +142,7 @@ export default function ReportPage() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 flex items-center justify-center p-4 ">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center border border-pink-200">
           <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
             <CheckCircleIcon className="w-10 h-10 text-white" />
@@ -185,7 +185,7 @@ export default function ReportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 text-[#000]">
       {/* Header */}
       <nav className="bg-white/70 backdrop-blur-md border-b border-pink-200">
         <div className="container mx-auto px-4 py-4">
@@ -351,49 +351,6 @@ export default function ReportPage() {
               </div>
 
               {/* File Upload */}
-              <div>
-                <label className="block text-gray-800 font-semibold mb-3">
-                  แนบรูปภาพ (ไม่บังคับ)
-                </label>
-                <div className="border-2 border-dashed border-pink-300 rounded-2xl p-8 text-center hover:border-pink-400 transition-colors bg-pink-50/20">
-                  <PhotoIcon className="w-12 h-12 text-pink-400 mx-auto mb-4" />
-                  <p className="text-gray-600 mb-2">คลิกเพื่อเลือกรูปภาพ หรือลากไฟล์มาวาง</p>
-                  <p className="text-sm text-gray-500 mb-4">รองรับไฟล์ JPG, PNG, GIF, WebP สูงสุด 10MB และ 2 รูป</p>
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleFileSelect}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-pink-100 file:text-pink-700 hover:file:bg-pink-200 transition-colors"
-                  />
-                </div>
-                
-                {/* Selected Files */}
-                {selectedFiles.length > 0 && (
-                  <div className="mt-4 space-y-3">
-                    {selectedFiles.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between bg-pink-50 p-4 rounded-xl border border-pink-200">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-rose-400 rounded-lg flex items-center justify-center">
-                            <PhotoIcon className="w-5 h-5 text-white" />
-                          </div>
-                          <div>
-                            <p className="text-gray-700 font-medium">{file.name}</p>
-                            <p className="text-gray-500 text-sm">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeFile(index)}
-                          className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
-                        >
-                          <XMarkIcon className="w-5 h-5" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
 
             {/* Submit Section */}
