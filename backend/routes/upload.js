@@ -4,7 +4,7 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 const { getPool } = require('../config/database');
-
+require("dotenv").config();
 const router = express.Router();
 
 // Create uploads directory if it doesn't exist
@@ -42,7 +42,7 @@ const upload = multer({
 });
 
 // POST /api/upload/issue-images/:issueId - Upload images for an issue
-router.post('/issue-images/:issueId', upload.array('images', 2), async (req, res) => {
+router.post('/admin-images/:issueId', upload.array('images', 2), async (req, res) => {
   try {
     const { issueId } = req.params;
     const { isAdmin = false } = req.body;

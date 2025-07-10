@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const { getPool } = require('../config/database');
+require("dotenv").config();
 
 const router = express.Router();
 
@@ -94,6 +95,63 @@ router.post('/login', [
     console.error('Login error:', error);
     res.status(500).json({
       error: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ',
+      message: error.message
+    });
+  }
+});
+
+// POST /api/admin/signup - สมัครแอดมินใหม่ (สำหรับตั้งค่าครั้งแรก หรือเพิ่มผู้ดูแล)
+router.post('/signup', [
+  body('username')
+    .trim()
+    .notEmpty().withMessage('Username จำเป็นต้องกรอก')
+    .isLength({ min: 4, max: 50 }).withMessage('Username ต้องมีความยาว 4–50 ตัวอักษร'),
+  body('password')
+    .notEmpty().withMessage('Password จำเป็นต้องกรอก')
+    .isLength({ min: 6 }).withMessage('Password ต้องมีความยาวอย่างน้อย 6 ตัวอักษร')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        error: 'ข้อมูลไม่ถูกต้อง',
+        details: errors.array()
+      });
+    }
+
+    const { username, password } = req.body;
+    const pool = getPool();
+
+    // ตรวจสอบว่า username ซ้ำหรือไม่
+    const [existing] = await pool.execute(
+      'SELECT id FROM admins WHERE username = ?',
+      [username]
+    );
+    if (existing.length > 0) {
+      return res.status(409).json({ error: 'Username นี้ถูกใช้งานแล้ว' });
+    }
+
+    // แฮชรหัสผ่าน
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // บันทึกลงฐานข้อมูล
+    const [result] = await pool.execute(
+      'INSERT INTO admins (username, password) VALUES (?, ?)',
+      [username, hashedPassword]
+    );
+
+    res.status(201).json({
+      success: true,
+      message: 'สมัครสมาชิกแอดมินสำเร็จ',
+      admin: {
+        id: result.insertId,
+        username
+      }
+    });
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({
+      error: 'เกิดข้อผิดพลาดในการสมัครสมาชิก',
       message: error.message
     });
   }
@@ -245,7 +303,7 @@ router.get('/issues', authenticateAdmin, async (req, res) => {
 });
 
 // PUT /api/admin/issues/:id/status - Update issue status
-router.put('/issues/:id/status', authenticateAdmin, [
+router.put('/issues/:id', authenticateAdmin, [
   body('status')
     .isIn(['pending', 'in_progress', 'contact_admin', 'completed'])
     .withMessage('สถานะไม่ถูกต้อง'),

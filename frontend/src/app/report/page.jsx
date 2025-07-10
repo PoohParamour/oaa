@@ -117,7 +117,7 @@ export default function ReportPage() {
           });
 
           try {
-            await axios.post(`http://localhost:5001/api/upload/issue-images/${issueId}`, formData, {
+            await axios.post(`http://localhost:5001/api/upload/admin-images/${issueId}`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data'
               }

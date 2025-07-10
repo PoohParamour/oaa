@@ -2,7 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const { getPool } = require('../config/database');
 const { v4: uuidv4 } = require('uuid');
-
+require("dotenv").config();
 const router = express.Router();
 
 // Generate unique tracking code

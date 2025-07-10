@@ -16,13 +16,13 @@ export default function Home() {
                 OAA Support
               </h1>
             </div>
-            <Link 
+            {/* <Link 
               href="/admin/login"
               className="text-pink-600 hover:text-pink-700 text-sm font-medium transition-colors flex items-center gap-2"
             >
               <CogIcon className="w-4 h-4" />
               Admin Login
-            </Link>
+            </Link> */}
           </div>
         </div>
       </nav>
@@ -51,7 +51,7 @@ export default function Home() {
           </div>
 
           {/* Action Cards */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {/* Report Issue */}
             <Link href="/report" className="group block">
               <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-center border border-pink-100 hover:border-pink-300 group-hover:scale-105 relative overflow-hidden">
@@ -104,7 +104,7 @@ export default function Home() {
               </div>
             </Link>
 
-            {/* Admin Panel */}
+            {/* Admin Panel
             <Link href="/admin/login" className="group block">
               <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-center border border-pink-100 hover:border-pink-300 group-hover:scale-105 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-pink-400"></div>
@@ -128,7 +128,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </Link>
+            </Link> */}
           </div>
         </div>
 
