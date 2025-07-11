@@ -1,5 +1,13 @@
 import Link from "next/link";
-import { DocumentTextIcon, MagnifyingGlassIcon, CogIcon, SparklesIcon, HeartIcon, StarIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import {
+  DocumentTextIcon,
+  MagnifyingGlassIcon,
+  CogIcon,
+  SparklesIcon,
+  HeartIcon,
+  StarIcon,
+  QuestionMarkCircleIcon,
+} from "@heroicons/react/24/outline";
 
 export default function Home() {
   return (
@@ -45,85 +53,164 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              ระบบจัดการปัญหาที่ทันสมัย รวดเร็ว และใช้งานง่าย 
+              ระบบจัดการปัญหาที่ทันสมัย รวดเร็ว และใช้งานง่าย
               พร้อมการติดตามสถานะแบบเรียลไทม์
             </p>
           </div>
 
           {/* Action Cards */}
           <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {/* Report Issue */}
+            {/* กล่อง 1: แจ้งปัญหา */}
             <Link href="/report" className="group block">
-              <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-center border border-pink-100 hover:border-pink-300 group-hover:scale-105 relative overflow-hidden">
+              <div
+                className="h-[300px] bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 
+    p-8 text-center border border-pink-100 hover:border-pink-300 group-hover:scale-105 
+    relative overflow-hidden flex flex-col justify-between"
+              >
+                {/* Top Gradient */}
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-400 to-rose-400"></div>
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-pink-100 to-rose-100 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity"></div>
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <DocumentTextIcon className="w-8 h-8 text-white" />
+                <div
+                  className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-pink-100 to-rose-100 
+      rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity"
+                ></div>
+
+                <div className="relative flex flex-col flex-1">
+                  <div>
+                    <div
+                      className="w-16 h-16 bg-gradient-to-br from-pink-400 to-rose-500 rounded-2xl 
+          flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg"
+                    >
+                      <DocumentTextIcon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-3">
+                      แจ้งปัญหา
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed min-h-[52px]">
+                      รายงานปัญหาพร้อมรายละเอียด และรับรหัสติดตามทันที
+                    </p>
                   </div>
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent mb-3">
-                    แจ้งปัญหา
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    รายงานปัญหาพร้อมรายละเอียด
-                    และรับรหัสติดตามทันที
-                  </p>
-                  <div className="inline-flex items-center text-pink-600 font-semibold group-hover:text-pink-700 transition-colors">
+
+                  <div
+                    className="inline-flex items-center justify-center text-pink-600 font-semibold 
+        group-hover:text-pink-700 transition-colors mt-auto pt-6"
+                  >
                     เริ่มแจ้งปัญหา
-                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <svg
+                      className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </div>
                 </div>
               </div>
             </Link>
 
-            {/* Track Status */}
+            {/* กล่อง 2: ติดตามสถานะ */}
             <Link href="/track" className="group block">
-              <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-center border border-pink-100 hover:border-pink-300 group-hover:scale-105 relative overflow-hidden">
+              <div
+                className="h-[300px] bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 
+    p-8 text-center border border-pink-100 hover:border-pink-300 group-hover:scale-105 
+    relative overflow-hidden flex flex-col justify-between"
+              >
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rose-400 to-pink-400"></div>
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-rose-100 to-pink-100 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity"></div>
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <MagnifyingGlassIcon className="w-8 h-8 text-white" />
+                <div
+                  className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-rose-100 to-pink-100 
+      rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity"
+                ></div>
+
+                <div className="relative flex flex-col flex-1">
+                  <div>
+                    <div
+                      className="w-16 h-16 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl 
+          flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg"
+                    >
+                      <MagnifyingGlassIcon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent mb-3">
+                      ติดตามสถานะ
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed min-h-[52px]">
+                      ตรวจสอบความคืบหน้า และรับการอัพเดทล่าสุด
+                    </p>
                   </div>
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent mb-3">
+
+                  <div
+                    className="inline-flex items-center justify-center text-rose-600 font-semibold 
+        group-hover:text-rose-700 transition-colors mt-auto pt-6"
+                  >
                     ติดตามสถานะ
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    ตรวจสอบความคืบหน้า
-                    และรับการอัพเดทล่าสุด
-                  </p>
-                  <div className="inline-flex items-center text-rose-600 font-semibold group-hover:text-rose-700 transition-colors">
-                    ติดตามสถานะ
-                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <svg
+                      className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </div>
                 </div>
               </div>
             </Link>
 
-            {/* FAQ */}
+            {/* กล่อง 3: FAQ */}
             <Link href="/faq" className="group block">
-              <div className="bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-center border border-pink-100 hover:border-pink-300 group-hover:scale-105 relative overflow-hidden">
+              <div
+                className="h-[300px] bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 
+    p-8 text-center border border-pink-100 hover:border-pink-300 group-hover:scale-105 
+    relative overflow-hidden flex flex-col justify-between"
+              >
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-pink-400"></div>
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity"></div>
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <QuestionMarkCircleIcon className="w-8 h-8 text-white" />
+                <div
+                  className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-purple-100 to-pink-100 
+      rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity"
+                ></div>
+
+                <div className="relative flex flex-col flex-1">
+                  <div>
+                    <div
+                      className="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl 
+          flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg"
+                    >
+                      <QuestionMarkCircleIcon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
+                      FAQ
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed min-h-[52px]">
+                      คำถามที่พบบ่อย และ คำแนะนำการใช้งาน
+                    </p>
                   </div>
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
-                    FAQ
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    คำถามที่พบบ่อย
-                    และคำแนะนำการใช้งาน
-                  </p>
-                  <div className="inline-flex items-center text-purple-600 font-semibold group-hover:text-purple-700 transition-colors">
+
+                  <div
+                    className="inline-flex items-center justify-center text-purple-600 font-semibold 
+        group-hover:text-purple-700 transition-colors mt-auto pt-6"
+                  >
                     ดูคำถามที่พบบ่อย
-                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <svg
+                      className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </div>
                 </div>

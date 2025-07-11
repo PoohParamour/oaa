@@ -456,11 +456,11 @@ export default function FAQ() {
                 FAQ
               </span>
               <br />
-              <span className="bg-gradient-to-r from-pink-500 to-rose-600 bg-clip-text text-transparent">
+              <span className="text-pink-500">
                 คำถามที่พบบ่อย
               </span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               รวมคำถามและคำตอบที่พบบ่อย พร้อมคำแนะนำในการใช้งาน
               เพื่อให้คุณสามารถแก้ไขปัญหาได้อย่างรวดเร็ว
             </p>
