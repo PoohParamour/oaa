@@ -127,7 +127,7 @@ export default function ReportPage() {
       };
 
       const response = await axios.post(
-        "http://31.97.109.247:5001/api/issues",
+        "https://api.femistyhouse.com/api/issues",
         issueData
       );
 
@@ -144,7 +144,7 @@ export default function ReportPage() {
 
           try {
             await axios.post(
-              `http://31.97.109.247:5001/api/upload/admin-images/${issueId}`,
+              `https://api.femistyhouse.com/api/upload/admin-images/${issueId}`,
               formData,
               {
                 headers: {

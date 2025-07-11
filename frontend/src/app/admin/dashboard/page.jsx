@@ -108,7 +108,7 @@ export default function AdminDashboard() {
       });
 
       const response = await axios.get(
-        `http://31.97.109.247:5001/api/admin/issues?${params}`
+        `https://api.femistyhouse.com/api/admin/issues?${params}`
       );
 
       if (response.data.success) {
@@ -190,7 +190,7 @@ export default function AdminDashboard() {
       };
 
       const response = await axios.put(
-        `http://31.97.109.247:5001/api/admin/issues/${selectedIssue.id}`,
+        `https://api.femistyhouse.com/api/admin/issues/${selectedIssue.id}`,
         updateData
       );
 
@@ -204,7 +204,7 @@ export default function AdminDashboard() {
 
           try {
             await axios.post(
-              `http://31.97.109.247:5001/api/upload/admin-images/${selectedIssue.id}`,
+              `https://api.femistyhouse.com/api/upload/admin-images/${selectedIssue.id}`,
               formData,
               {
                 headers: {
@@ -516,12 +516,12 @@ export default function AdminDashboard() {
                                   .map((image, index) => (
                                     <img
                                       key={index}
-                                      src={`http://31.97.109.247:5001${image}`}
+                                      src={`https://api.femistyhouse.com${image}`}
                                       alt={`รูปภาพ ${index + 1}`}
                                       className="w-16 h-16 object-cover rounded-lg border border-slate-200 cursor-pointer hover:scale-110 transition-transform"
                                       onClick={() =>
                                         window.open(
-                                          `http://31.97.109.247:5001${image}`,
+                                          `https://api.femistyhouse.com${image}`,
                                           "_blank"
                                         )
                                       }
@@ -701,12 +701,12 @@ export default function AdminDashboard() {
                         {selectedIssue.customer_images.map((image, index) => (
                           <div key={index} className="relative group">
                             <img
-                              src={`http://31.97.109.247:5001${image}`}
+                              src={`https://api.femistyhouse.com${image}`}
                               alt={`รูปภาพ ${index + 1}`}
                               className="w-full h-48 object-cover rounded-xl border border-slate-200 cursor-pointer group-hover:scale-105 transition-transform"
                               onClick={() =>
                                 window.open(
-                                  `http://31.97.109.247:5001${image}`,
+                                  `https://api.femistyhouse.com${image}`,
                                   "_blank"
                                 )
                               }

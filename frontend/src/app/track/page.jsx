@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+export const dynamic = 'force-dynamic'
+import { Suspense } from 'react'
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
@@ -20,7 +22,7 @@ import {
 } from "@heroicons/react/24/outline";
 import axios from "axios";
 
-export default function TrackPage() {
+function TrackPage() {
   const searchParams = useSearchParams();
   const [trackingCode, setTrackingCode] = useState(
     searchParams.get("code") || ""
@@ -92,7 +94,7 @@ export default function TrackPage() {
       setSearched(true);
 
       const response = await axios.get(
-        `http://31.97.109.247:5001/api/issues/track/${trackingCode}`
+        `https://api.femistyhouse.com/api/issues/track/${trackingCode}`
       );
 
       if (response.data.success) {
@@ -123,7 +125,7 @@ export default function TrackPage() {
       minute: "2-digit",
     });
   };
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 text-[#000]">
       {/* Header */}
@@ -369,12 +371,12 @@ export default function TrackPage() {
                       {issue.customer_images.map((image, index) => (
                         <div key={index} className="relative group">
                           <img
-                            src={`http://31.97.109.247:5001${image}`}
+                            src={`https://api.femistyhouse.com${image}`}
                             alt={`รูปภาพประกอบ ${index + 1}`}
                             className="w-full h-64 object-cover rounded-2xl border border-pink-200 group-hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg"
                             onClick={() =>
                               window.open(
-                                `http://31.97.109.247:5001${image}`,
+                                `https://api.femistyhouse.com${image}`,
                                 "_blank"
                               )
                             }
@@ -417,12 +419,12 @@ export default function TrackPage() {
                           {issue.admin_images.map((image, index) => (
                             <div key={index} className="relative group">
                               <img
-                                src={`http://31.97.109.247:5001${image}`}
+                                src={`https://api.femistyhouse.com${image}`}
                                 alt={`รูปภาพจากแอดมิน ${index + 1}`}
                                 className="w-full h-64 object-cover rounded-2xl border border-purple-200 group-hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg"
                                 onClick={() =>
                                   window.open(
-                                    `http://31.97.109.247:5001${image}`,
+                                    `https://api.femistyhouse.com${image}`,
                                     "_blank"
                                   )
                                 }
@@ -502,4 +504,12 @@ export default function TrackPage() {
       </div>
     </div>
   );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>⏳ กำลังโหลดข้อมูล…</div>}>
+      <TrackPage />
+    </Suspense>
+  )
 }

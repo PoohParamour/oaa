@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
     try {
       setIsLoading(true);
       
-      const response = await axios.post('http://31.97.109.247:5001/api/admin/login', formData);
+      const response = await axios.post('https://api.femistyhouse.com/api/admin/login', formData);
       
       if (response.data.success) {
         localStorage.setItem('adminToken', response.data.token);
