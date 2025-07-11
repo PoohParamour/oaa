@@ -154,6 +154,44 @@ router.post('/signup', [
   }
 });
 
+// DELETE /api/admin/delete/:username
+router.delete('/delete/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    // ตรวจสอบว่ามี username นี้จริงไหม
+    const [admins] = await db.execute(
+      'SELECT id FROM admins WHERE username = ?',
+      [username]
+    );
+
+    if (admins.length === 0) {
+      return res.status(404).json({
+        error: 'ไม่พบผู้ใช้ที่ต้องการลบ',
+        message: `ไม่มีแอดมินชื่อ "${username}" ในระบบ`
+      });
+    }
+
+    // ลบผู้ใช้
+    await db.execute(
+      'DELETE FROM admins WHERE username = ?',
+      [username]
+    );
+
+    res.json({
+      success: true,
+      message: `ลบแอดมิน "${username}" เรียบร้อยแล้ว`
+    });
+
+  } catch (error) {
+    console.error('Delete admin error:', error);
+    res.status(500).json({
+      error: 'เกิดข้อผิดพลาดในการลบแอดมิน',
+      message: error.message
+    });
+  }
+});
+
 // GET /api/admin/issues - Get all issues with pagination and filters
 router.get('/issues', authenticateAdmin, async (req, res) => {
   try {

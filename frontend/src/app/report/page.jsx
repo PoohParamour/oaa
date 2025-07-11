@@ -50,11 +50,11 @@ export default function ReportPage() {
       label:
         "3. อีเมลร้านติดยืนยัน ใช้งานไม่ได้ ไม่สามารถ Login และต้องยืนยันเบอร์โทร",
     },
-    {
-      value: "Google Form",
-      label:
-        "4. ลูกค้าส่ง Google Form เก่าของทางร้าน เช่น ย้าย Family รวมทั้งกรณีเลือกรับเมลร้าน แต่ยังไม่ได้รับการแก้ไข หรือรับเมล หรือ กลุ่มครอบครัวไม่พร้อมใช้งาน แต่ยังไม่มีสถานะในชีท Update",
-    },
+    // {
+    //   value: "Google Form",
+    //   label:
+    //     "4. ลูกค้าส่ง Google Form เก่าของทางร้าน เช่น ย้าย Family รวมทั้งกรณีเลือกรับเมลร้าน แต่ยังไม่ได้รับการแก้ไข หรือรับเมล หรือ กลุ่มครอบครัวไม่พร้อมใช้งาน แต่ยังไม่มีสถานะในชีท Update",
+    // },
   ];
 
   // Handle email fields
@@ -127,7 +127,7 @@ export default function ReportPage() {
       };
 
       const response = await axios.post(
-        "http://localhost:5001/api/issues",
+        "http://31.97.109.247:5001/api/issues",
         issueData
       );
 
@@ -144,7 +144,7 @@ export default function ReportPage() {
 
           try {
             await axios.post(
-              `http://localhost:5001/api/upload/admin-images/${issueId}`,
+              `http://31.97.109.247:5001/api/upload/admin-images/${issueId}`,
               formData,
               {
                 headers: {

@@ -44,7 +44,6 @@ export default function AdminDashboard() {
     completed: 0,
   });
 
-
   const statusConfig = {
     pending: {
       label: "รอดำเนินการ",
@@ -73,10 +72,14 @@ export default function AdminDashboard() {
   };
 
   const problemTypeLabels = {
-    youtube_premium: "ไม่ขึ้นพรีเมี่ยมใช้งานไม่ได้ ซื้อนานแล้ว เฉพาะก่อนวันที่ 15 มิ.ย. (ไม่เกินวันที่ 15) กรณีนี้หลุดพรีเมี่ยมและต้องขึ้น Family manager",
-    family_plan: "กลุ่มครอบครัวไม่พร้อมใช้งาน เช็คหน้า Family แล้วไม่ขึ้นกลุ่มครอบครัว",
-    email_not_working: "อีเมลร้านติดยืนยัน ใช้งานไม่ได้ ไม่สามารถ Login และต้องยืนยันเบอร์โทร",
-    "Google Form" : "ลูกค้าส่ง Google Form เก่าของทางร้าน เช่น ย้าย Family รวมทั้งกรณีเลือกรับเมลร้าน แต่ยังไม่ได้รับการแก้ไข หรือรับเมล หรือ กลุ่มครอบครัวไม่พร้อมใช้งาน แต่ยังไม่มีสถานะในชีท Update",
+    youtube_premium:
+      "ไม่ขึ้นพรีเมี่ยมใช้งานไม่ได้ ซื้อนานแล้ว เฉพาะก่อนวันที่ 15 มิ.ย. (ไม่เกินวันที่ 15) กรณีนี้หลุดพรีเมี่ยมและต้องขึ้น Family manager",
+    family_plan:
+      "กลุ่มครอบครัวไม่พร้อมใช้งาน เช็คหน้า Family แล้วไม่ขึ้นกลุ่มครอบครัว",
+    email_not_working:
+      "อีเมลร้านติดยืนยัน ใช้งานไม่ได้ ไม่สามารถ Login และต้องยืนยันเบอร์โทร",
+    "Google Form":
+      "ลูกค้าส่ง Google Form เก่าของทางร้าน เช่น ย้าย Family รวมทั้งกรณีเลือกรับเมลร้าน แต่ยังไม่ได้รับการแก้ไข หรือรับเมล หรือ กลุ่มครอบครัวไม่พร้อมใช้งาน แต่ยังไม่มีสถานะในชีท Update",
   };
 
   useEffect(() => {
@@ -105,7 +108,7 @@ export default function AdminDashboard() {
       });
 
       const response = await axios.get(
-        `http://localhost:5001/api/admin/issues?${params}`
+        `http://31.97.109.247:5001/api/admin/issues?${params}`
       );
 
       if (response.data.success) {
@@ -187,7 +190,7 @@ export default function AdminDashboard() {
       };
 
       const response = await axios.put(
-        `http://localhost:5001/api/admin/issues/${selectedIssue.id}`,
+        `http://31.97.109.247:5001/api/admin/issues/${selectedIssue.id}`,
         updateData
       );
 
@@ -201,7 +204,7 @@ export default function AdminDashboard() {
 
           try {
             await axios.post(
-              `http://localhost:5001/api/upload/admin-images/${selectedIssue.id}`,
+              `http://31.97.109.247:5001/api/upload/admin-images/${selectedIssue.id}`,
               formData,
               {
                 headers: {
@@ -513,12 +516,12 @@ export default function AdminDashboard() {
                                   .map((image, index) => (
                                     <img
                                       key={index}
-                                      src={`http://localhost:5001${image}`}
+                                      src={`http://31.97.109.247:5001${image}`}
                                       alt={`รูปภาพ ${index + 1}`}
                                       className="w-16 h-16 object-cover rounded-lg border border-slate-200 cursor-pointer hover:scale-110 transition-transform"
                                       onClick={() =>
                                         window.open(
-                                          `http://localhost:5001${image}`,
+                                          `http://31.97.109.247:5001${image}`,
                                           "_blank"
                                         )
                                       }
@@ -698,12 +701,12 @@ export default function AdminDashboard() {
                         {selectedIssue.customer_images.map((image, index) => (
                           <div key={index} className="relative group">
                             <img
-                              src={`http://localhost:5001${image}`}
+                              src={`http://31.97.109.247:5001${image}`}
                               alt={`รูปภาพ ${index + 1}`}
                               className="w-full h-48 object-cover rounded-xl border border-slate-200 cursor-pointer group-hover:scale-105 transition-transform"
                               onClick={() =>
                                 window.open(
-                                  `http://localhost:5001${image}`,
+                                  `http://31.97.109.247:5001${image}`,
                                   "_blank"
                                 )
                               }
@@ -766,42 +769,75 @@ export default function AdminDashboard() {
                     </div>
                   )}
                 </div> */}
+                {/* Modal Footer */}
+                <div className="bg-slate-50 px-4 py-4 border-t border-slate-200  overflow-y-scroll">
+                  <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+                    <button
+                      onClick={() => updateIssue("pending")}
+                      disabled={isSubmitting}
+                      className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 disabled:opacity-50 transition-colors w-full sm:w-auto"
+                    >
+                      รอดำเนินการ
+                    </button>
+                    <button
+                      onClick={() => updateIssue("in_progress")}
+                      disabled={isSubmitting}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors w-full sm:w-auto"
+                    >
+                      กำลังดำเนินการ
+                    </button>
+                    <button
+                      onClick={() => updateIssue("contact_admin")}
+                      disabled={isSubmitting}
+                      className="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 disabled:opacity-50 transition-colors w-full sm:w-auto"
+                    >
+                      ติดต่อแอดมิน
+                    </button>
+                    <button
+                      onClick={() => updateIssue("completed")}
+                      disabled={isSubmitting}
+                      className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 disabled:opacity-50 transition-colors w-full sm:w-auto"
+                    >
+                      เสร็จสิ้น
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Modal Footer */}
-            <div className="bg-slate-50 px-6 py-4 border-t border-slate-200">
-              <div className="flex flex-wrap gap-3">
+            {/* Modal Footer
+            <div className="bg-slate-50 px-4 py-4 border-t border-slate-200  overflow-y-scroll">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                 <button
                   onClick={() => updateIssue("pending")}
                   disabled={isSubmitting}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 disabled:opacity-50 transition-colors"
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 disabled:opacity-50 transition-colors w-full sm:w-auto"
                 >
                   รอดำเนินการ
                 </button>
                 <button
                   onClick={() => updateIssue("in_progress")}
                   disabled={isSubmitting}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 transition-colors w-full sm:w-auto"
                 >
                   กำลังดำเนินการ
                 </button>
                 <button
                   onClick={() => updateIssue("contact_admin")}
                   disabled={isSubmitting}
-                  className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 disabled:opacity-50 transition-colors"
+                  className="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 disabled:opacity-50 transition-colors w-full sm:w-auto"
                 >
                   ติดต่อแอดมิน
                 </button>
                 <button
                   onClick={() => updateIssue("completed")}
                   disabled={isSubmitting}
-                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors"
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 disabled:opacity-50 transition-colors w-full sm:w-auto"
                 >
                   เสร็จสิ้น
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

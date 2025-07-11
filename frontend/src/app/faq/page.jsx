@@ -487,7 +487,7 @@ export default function FAQ() {
                 FAQ
               </span>
               <br />
-              <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">
+              <span className="text-pink-600">
                 คำถามที่พบบ่อย
               </span>
             </h1>

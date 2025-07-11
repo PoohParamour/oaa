@@ -92,7 +92,7 @@ export default function TrackPage() {
       setSearched(true);
 
       const response = await axios.get(
-        `http://localhost:5001/api/issues/track/${trackingCode}`
+        `http://31.97.109.247:5001/api/issues/track/${trackingCode}`
       );
 
       if (response.data.success) {
@@ -369,12 +369,12 @@ export default function TrackPage() {
                       {issue.customer_images.map((image, index) => (
                         <div key={index} className="relative group">
                           <img
-                            src={`http://localhost:5001${image}`}
+                            src={`http://31.97.109.247:5001${image}`}
                             alt={`รูปภาพประกอบ ${index + 1}`}
                             className="w-full h-64 object-cover rounded-2xl border border-pink-200 group-hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg"
                             onClick={() =>
                               window.open(
-                                `http://localhost:5001${image}`,
+                                `http://31.97.109.247:5001${image}`,
                                 "_blank"
                               )
                             }
@@ -417,12 +417,12 @@ export default function TrackPage() {
                           {issue.admin_images.map((image, index) => (
                             <div key={index} className="relative group">
                               <img
-                                src={`http://localhost:5001${image}`}
+                                src={`http://31.97.109.247:5001${image}`}
                                 alt={`รูปภาพจากแอดมิน ${index + 1}`}
                                 className="w-full h-64 object-cover rounded-2xl border border-purple-200 group-hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg"
                                 onClick={() =>
                                   window.open(
-                                    `http://localhost:5001${image}`,
+                                    `http://31.97.109.247:5001${image}`,
                                     "_blank"
                                   )
                                 }
