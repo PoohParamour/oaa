@@ -291,6 +291,37 @@ export default function AdminDashboard() {
     );
   }
 
+  const getPagination = (current, total) => {
+    const delta = 1;
+    const range = [];
+    const rangeWithDots = [];
+    let l;
+
+    for (let i = 1; i <= total; i++) {
+      if (
+        i === 1 ||
+        i === total ||
+        (i >= current - delta && i <= current + delta)
+      ) {
+        range.push(i);
+      }
+    }
+
+    for (let i of range) {
+      if (l) {
+        if (i - l === 2) {
+          rangeWithDots.push(l + 1);
+        } else if (i - l !== 1) {
+          rangeWithDots.push("...");
+        }
+      }
+      rangeWithDots.push(i);
+      l = i;
+    }
+
+    return rangeWithDots;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100 text-[#000]">
       {/* Header */}
@@ -571,42 +602,54 @@ export default function AdminDashboard() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-8">
-            <button
-              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-white/80 backdrop-blur-sm border border-pink-200 rounded-lg hover:bg-pink-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              ก่อนหน้า
-            </button>
+          <div className="mt-8">
+            <div className="flex justify-center">
+              <div className="flex items-center gap-2 overflow-x-auto max-w-full px-2 py-2 rounded-lg bg-white shadow-sm scrollbar-hide">
+                {/* ปุ่มก่อนหน้า */}
+                <button
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="flex-shrink-0 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  ก่อนหน้า
+                </button>
 
-            <div className="flex gap-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                (page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                      currentPage === page
-                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg"
-                        : "bg-white/80 backdrop-blur-sm border border-pink-200 hover:bg-pink-50"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                )
-              )}
+                {/* ปุ่มเลขหน้า */}
+                {getPagination(currentPage, totalPages).map((item, index) =>
+                  item === "..." ? (
+                    <span
+                      key={`ellipsis-${index}`}
+                      className="flex-shrink-0 px-3 py-2 text-sm text-gray-500 select-none"
+                    >
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={item}
+                      onClick={() => setCurrentPage(item)}
+                      className={`flex-shrink-0 px-3 py-2 text-sm rounded-lg transition-colors ${
+                        currentPage === item
+                          ? "bg-purple-600 text-white shadow"
+                          : "bg-white border border-gray-300 hover:bg-gray-100"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
+
+                {/* ปุ่มถัดไป */}
+                <button
+                  onClick={() =>
+                    setCurrentPage(Math.min(totalPages, currentPage + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="flex-shrink-0 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  ถัดไป
+                </button>
+              </div>
             </div>
-
-            <button
-              onClick={() =>
-                setCurrentPage(Math.min(totalPages, currentPage + 1))
-              }
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              ถัดไป
-            </button>
           </div>
         )}
       </div>
